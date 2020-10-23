@@ -2,10 +2,16 @@ import pygame
 from settings import *
 from sprites import *
 
+pygame.init()
+pygame.mixer.init()
+pygame.font.init()
+
 class Game:
     def __init__(self):
         self.win = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(TITLE)
+
+        self.font_name = pygame.font.match_font(FONT_NAME)
 
         self.playing = True
         self.running = True
@@ -38,9 +44,13 @@ class Game:
     
     def run(self):
         while self.playing:
-            self.draw()
-            self.events()
-            self.update()
+            if self.player.health > 0:
+                self.draw()
+                self.events()
+                self.update()
+            else:
+                self.playing = False
+                self.gameOverScreen()
     
     def draw(self):
         self.clock.tick(FPS)
@@ -82,4 +92,29 @@ class Game:
         pass
 
     def gameOverScreen(self):
-        pass
+        self.win.fill(WHITE)
+        self.draw_text('Player Score =  '+str(self.score), 25, CYAN, 250, 530)
+        pygame.display.flip()
+        self.waiting_for_key()
+
+    def draw_text(self, text, size, color, x, y):
+	    font = pygame.font.Font(self.font_name, size)
+	    text_surface = font.render(text, True, color)
+	    text_rect = text_surface.get_rect()
+	    text_rect.x = x
+	    text_rect.y = y
+	    self.win.blit(text_surface, text_rect)
+
+    def waiting_for_key(self):
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    waiting = False
+                    self.running = False
+                if event.type == pygame.KEYDOWN:
+                    self.running = True
+                    waiting = False
+                    
+ 
+

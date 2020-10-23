@@ -26,7 +26,6 @@ class Player(pygame.sprite.Sprite):
 
         if not self.alreadyColliding:
             self.collisions()
-
         elif self.alreadyColliding:
             if not pygame.sprite.groupcollide(self.playerGrp, self.mobGrp, False, False):
                 self.alreadyColliding = False
@@ -41,6 +40,7 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.groupcollide(self.playerGrp, self.mobGrp, False, False):
             self.health -= Mob().mob_damage
             self.alreadyColliding = True
+            print(self.health)
             
             
         
@@ -53,7 +53,7 @@ class Mob(pygame.sprite.Sprite):
         self.rect.center = (random.randint(0, WIDTH - 25), -25)
         self.y_vel = random.randint(1, 10)
         self.x_vel = random.randint(-10, 10)
-        self.mob_damage = 7
+        self.mob_damage = 20
         if self.x_vel == 0:
             self.x_vel = 3
         
